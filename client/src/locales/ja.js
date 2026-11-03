@@ -7,6 +7,7 @@ export default {
     finance: '財務',
     demandForecast: '需要予測',
     restocking: '補充発注',
+    reports: 'レポート',
     companyName: '触媒コンポーネンツ',
     subtitle: '在庫管理システム'
   },
@@ -81,6 +82,8 @@ export default {
     skus: 'SKU',
     searchPlaceholder: '品目名で検索...',
     clearSearch: '検索をクリア',
+    exportCsv: 'CSVエクスポート',
+    exportCsvTitle: '表示中の商品をCSVファイルとしてダウンロード',
     totalItems: '総品目数',
     totalValue: '総価値',
     lowStockItems: '在庫僅少品目',
@@ -99,6 +102,38 @@ export default {
       totalValue: '総価値',
       location: '場所',
       status: 'ステータス'
+    }
+  },
+
+  // Reports
+  reports: {
+    title: '業績レポート',
+    description: '四半期ごとの業績指標と月次トレンドを表示します',
+    loading: 'レポートを読み込み中...',
+    loadFailed: 'レポートの読み込みに失敗しました',
+    quarterlyPerformance: '四半期業績',
+    monthlyRevenueTrend: '月次売上トレンド',
+    monthOverMonth: '前月比分析',
+    monthYear: '{year}年{month}',
+    notAvailable: 'N/A',
+    chartLabel: '月次売上の棒グラフ',
+    table: {
+      quarter: '四半期',
+      totalOrders: '総注文数',
+      totalRevenue: '総売上',
+      avgOrderValue: '平均注文額',
+      fulfillmentRate: '出荷達成率',
+      month: '月',
+      orders: '注文数',
+      revenue: '売上',
+      change: '増減額',
+      growthRate: '成長率'
+    },
+    stats: {
+      totalRevenue: '総売上',
+      avgMonthlyRevenue: '月平均売上',
+      totalOrders: '総注文数',
+      bestQuarter: '最高業績の四半期'
     }
   },
 

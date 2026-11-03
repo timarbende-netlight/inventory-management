@@ -11,6 +11,7 @@
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">{{ t('inventory.stockLevels') }} ({{ filteredItems.length }} {{ t('inventory.skus') }})</h3>
+          <div class="header-actions">
           <div class="search-box">
             <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -31,6 +32,19 @@
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
               </svg>
             </button>
+          </div>
+          <button
+            type="button"
+            class="export-btn"
+            :disabled="filteredItems.length === 0"
+            :title="t('inventory.exportCsvTitle')"
+            @click="exportCsv"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            {{ t('inventory.exportCsv') }}
+          </button>
           </div>
         </div>
         <div class="table-container">
@@ -88,6 +102,7 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { api } from '../api'
 import { useFilters } from '../composables/useFilters'
 import { useI18n } from '../composables/useI18n'
+import { toCsv, downloadCsv, csvNumber } from '../utils/csv'
 import InventoryDetailModal from '../components/InventoryDetailModal.vue'
 
 export default {
@@ -201,6 +216,35 @@ export default {
       showItemModal.value = true
     }
 
+    // Exports exactly what is shown (search + filters, same sort order),
+    // using translated headers/values so the file matches the UI language.
+    const exportCsv = () => {
+      const headers = [
+        'sku', 'itemName', 'category', 'quantityOnHand', 'reorderPoint',
+        'unitCost', 'totalValue', 'location', 'status'
+      ].map(key => t(`inventory.table.${key}`))
+
+      // Raw numbers only (no currency symbol / thousands separators) so
+      // spreadsheets parse them as numeric cells.
+      const rows = filteredItems.value.map(item => [
+        item.sku,
+        translateProductName(item.name),
+        translateCategory(item.category),
+        item.quantity_on_hand,
+        item.reorder_point,
+        csvNumber(item.unit_cost),
+        csvNumber(item.quantity_on_hand * item.unit_cost),
+        translateWarehouse(item.location),
+        getStockStatus(item)
+      ])
+
+      // Local date (not toISOString, which is UTC and can be off by a day)
+      const now = new Date()
+      const pad = n => String(n).padStart(2, '0')
+      const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
+      downloadCsv(`inventory-${date}.csv`, toCsv(headers, rows))
+    }
+
     onMounted(loadInventory)
 
     return {
@@ -218,7 +262,8 @@ export default {
       showItemDetail,
       currencySymbol,
       translateProductName,
-      translateWarehouse
+      translateWarehouse,
+      exportCsv
     }
   }
 }
@@ -252,6 +297,56 @@ export default {
   font-weight: 600;
   color: #0f172a;
   margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  color: #0f172a;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.export-btn svg {
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+}
+
+.export-btn:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.export-btn:focus-visible {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.export-btn:disabled {
+  color: #94a3b8;
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+}
+
+.export-btn:disabled svg {
+  color: #cbd5e1;
 }
 
 .search-box {
