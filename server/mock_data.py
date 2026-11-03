@@ -35,5 +35,13 @@ recent_transactions = load_json_file('transactions.json')
 # Load purchase orders
 purchase_orders = load_json_file('purchase_orders.json')
 
+# Supplier catalog (unit cost + lead time) for demand-forecast SKUs.
+# Needed because most forecast SKUs don't exist in inventory/orders data.
+restock_catalog = load_json_file('restock_catalog.json')
+
+# Submitted restocking orders. Intentionally in-memory only: like the rest of the
+# demo data, this resets when the server restarts.
+restock_orders = []
+
 # All data is now loaded from JSON files in the data/ directory
 # This allows for easier maintenance and updates of the sample data

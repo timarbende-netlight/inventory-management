@@ -1,0 +1,11 @@
+[
+  {"item_sku": "WDG-001", "supplier": "Apex Industrial Supply", "unit_cost": 18.50, "lead_time_days": 14},
+  {"item_sku": "BRG-102", "supplier": "Northwind Bearings", "unit_cost": 42.00, "lead_time_days": 10},
+  {"item_sku": "GSK-203", "supplier": "ThermoSeal Corp", "unit_cost": 9.75, "lead_time_days": 7},
+  {"item_sku": "MTR-304", "supplier": "Voltaic Motors", "unit_cost": 310.00, "lead_time_days": 28},
+  {"item_sku": "FLT-405", "supplier": "ClearFlow Filtration", "unit_cost": 12.40, "lead_time_days": 9},
+  {"item_sku": "VLV-506", "supplier": "Meridian Valves", "unit_cost": 55.00, "lead_time_days": 21},
+  {"item_sku": "PSU-501", "supplier": "Voltaic Motors", "unit_cost": 64.90, "lead_time_days": 18},
+  {"item_sku": "SNR-420", "supplier": "Sentinel Sensors", "unit_cost": 27.30, "lead_time_days": 12},
+  {"item_sku": "CTL-330", "supplier": "Meridian Valves", "unit_cost": 88.00, "lead_time_days": 16}
+]
