@@ -81,6 +81,8 @@ export default {
     skus: 'SKUs',
     searchPlaceholder: 'Search by item name...',
     clearSearch: 'Clear search',
+    exportCsv: 'Export CSV',
+    exportCsvTitle: 'Download the currently displayed items as a CSV file',
     totalItems: 'Total Items',
     totalValue: 'Total Value',
     lowStockItems: 'Low Stock Items',
